@@ -11,6 +11,17 @@ pub struct RegistryConfig {
     /// Public key clients use to verify signatures from the resolver service.
     pub resolver_pubkey: Pubkey,
     pub registration_fee_lamports: u64,
+    /// Minimum stake (lamports) required to register a name (Phase 2).
+    pub min_stake_lamports: u64,
+    /// Share of stake (basis points) taken on a failed challenge (Phase 2).
+    pub slash_bps: u16,
+    /// Seconds to wait before stake can be withdrawn after requesting unstake (Phase 2).
+    pub unstake_cooldown_secs: i64,
+    /// Fee (basis points) on every marketplace sale (Phase 3).
+    pub marketplace_fee_bps: u16,
+    /// Wallets allowed to report challenges (Phase 2).
+    #[max_len(MAX_VERIFIERS)]
+    pub verifiers: Vec<Pubkey>,
     pub bump: u8,
 }
 
@@ -63,9 +74,13 @@ pub struct AgentRecord {
     pub status: AgentStatus,
     pub registered_at: i64,
     pub updated_at: i64,
-    // Reserved for Phase 2 (trust/stake). Always zero in Phase 1.
+    // Phase 2 (trust/stake) fields.
     pub stake_lamports: u64,
     pub passes: u32,
     pub fails: u32,
+    /// Timestamp when unstake was requested; 0 means no unstake pending (Phase 2).
+    pub unstake_requested_at: i64,
+    /// Whether the endpoint has been verified by a verifier (Phase 2).
+    pub endpoint_verified: bool,
     pub bump: u8,
 }

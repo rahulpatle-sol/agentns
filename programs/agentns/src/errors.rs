@@ -22,4 +22,43 @@ pub enum AgentNsError {
     SameOwner,
     #[msg("Treasury account does not match the registry config")]
     InvalidTreasury,
+    // Shared errors (Phase 2 & 3)
+    #[msg("Basis points value exceeds maximum allowed")]
+    InvalidBps,
+    #[msg("Cooldown must be non-negative")]
+    InvalidCooldown,
+    #[msg("Arithmetic overflow")]
+    MathOverflow,
+    // Phase 2 errors
+    #[msg("Stake is below the minimum required")]
+    StakeBelowMinimum,
+    #[msg("Signer is not an authorized verifier")]
+    NotAVerifier,
+    #[msg("Too many verifiers (max 8)")]
+    TooManyVerifiers,
+    #[msg("Duplicate verifier in list")]
+    DuplicateVerifier,
+    #[msg("No stake to withdraw")]
+    NoStakeToWithdraw,
+    #[msg("Unstake was not requested")]
+    UnstakeNotRequested,
+    #[msg("Unstake already requested")]
+    UnstakeAlreadyRequested,
+    #[msg("Cooldown period has not finished")]
+    CooldownNotFinished,
+    #[msg("Stake invariant would be broken")]
+    StakeInvariantBroken,
+    // Phase 3 errors
+    #[msg("Price must be greater than zero")]
+    InvalidPrice,
+    #[msg("Listing is stale (owner changed)")]
+    ListingStale,
+    #[msg("Price exceeds maximum allowed")]
+    PriceAboveMax,
+    #[msg("Unstake is pending, cannot list or buy")]
+    UnstakePending,
+    #[msg("Cannot buy your own listing")]
+    CannotBuyOwnName,
+    #[msg("Listing does not match agent record")]
+    ListingMismatch,
 }

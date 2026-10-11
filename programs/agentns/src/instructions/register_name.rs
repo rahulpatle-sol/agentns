@@ -17,7 +17,8 @@ use crate::utils::*;
     version: String,
     endpoint: String,
     agent_pubkey: Pubkey,
-    metadata_uri: String
+    metadata_uri: String,
+    stake_lamports: u64
 )]
 pub struct RegisterName<'info> {
     #[account(mut)]
@@ -54,6 +55,7 @@ pub fn handle_register_name(
     endpoint: String,
     agent_pubkey: Pubkey,
     metadata_uri: String,
+    stake_lamports: u64,
 ) -> Result<()> {
     validate_part(&agent_id)?;
     validate_part(&capability)?;
@@ -61,6 +63,12 @@ pub fn handle_register_name(
     validate_version(&version)?;
     validate_endpoint(&endpoint)?;
     validate_metadata_uri(&metadata_uri)?;
+
+    // Check minimum stake
+    require!(
+        stake_lamports >= ctx.accounts.config.min_stake_lamports,
+        AgentNsError::StakeBelowMinimum
+    );
 
     // The PDA was derived from the client-supplied hash, so re-compute it here.
     // This is what guarantees one account per unique full name.
@@ -81,6 +89,18 @@ pub fn handle_register_name(
         )?;
     }
 
+    // Transfer stake from owner to the agent_record account
+    system_program::transfer(
+        CpiContext::new(
+            ctx.accounts.system_program.key(),
+            system_program::Transfer {
+                from: ctx.accounts.owner.to_account_info(),
+                to: ctx.accounts.agent_record.to_account_info(),
+            },
+        ),
+        stake_lamports,
+    )?;
+
     let now = Clock::get()?.unix_timestamp;
     let record = &mut ctx.accounts.agent_record;
     record.owner = ctx.accounts.owner.key();
@@ -97,9 +117,11 @@ pub fn handle_register_name(
     record.status = AgentStatus::Active;
     record.registered_at = now;
     record.updated_at = now;
-    record.stake_lamports = 0;
+    record.stake_lamports = stake_lamports;
     record.passes = 0;
     record.fails = 0;
+    record.unstake_requested_at = 0;
+    record.endpoint_verified = false;
     record.bump = ctx.bumps.agent_record;
 
     emit!(AgentRegistered {
