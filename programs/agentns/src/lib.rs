@@ -23,8 +23,21 @@ pub mod agentns {
         treasury: Pubkey,
         resolver_pubkey: Pubkey,
         registration_fee_lamports: u64,
+        min_stake_lamports: u64,
+        slash_bps: u16,
+        unstake_cooldown_secs: i64,
+        marketplace_fee_bps: u16,
     ) -> Result<()> {
-        handle_initialize_config(ctx, treasury, resolver_pubkey, registration_fee_lamports)
+        handle_initialize_config(
+            ctx,
+            treasury,
+            resolver_pubkey,
+            registration_fee_lamports,
+            min_stake_lamports,
+            slash_bps,
+            unstake_cooldown_secs,
+            marketplace_fee_bps,
+        )
     }
 
     pub fn update_config(
@@ -32,12 +45,20 @@ pub mod agentns {
         new_treasury: Option<Pubkey>,
         new_resolver_pubkey: Option<Pubkey>,
         new_registration_fee_lamports: Option<u64>,
+        new_min_stake_lamports: Option<u64>,
+        new_slash_bps: Option<u16>,
+        new_unstake_cooldown_secs: Option<i64>,
+        new_marketplace_fee_bps: Option<u16>,
     ) -> Result<()> {
         handle_update_config(
             ctx,
             new_treasury,
             new_resolver_pubkey,
             new_registration_fee_lamports,
+            new_min_stake_lamports,
+            new_slash_bps,
+            new_unstake_cooldown_secs,
+            new_marketplace_fee_bps,
         )
     }
 
@@ -53,6 +74,7 @@ pub mod agentns {
         endpoint: String,
         agent_pubkey: Pubkey,
         metadata_uri: String,
+        stake_lamports: u64,
     ) -> Result<()> {
         handle_register_name(
             ctx,
@@ -65,6 +87,7 @@ pub mod agentns {
             endpoint,
             agent_pubkey,
             metadata_uri,
+            stake_lamports,
         )
     }
 
@@ -84,4 +107,11 @@ pub mod agentns {
     pub fn revoke_name(ctx: Context<RevokeName>) -> Result<()> {
         handle_revoke_name(ctx)
     }
+
+    // ===== Phase 2: trust / stake (added in branch phase2-trust) =====
+    // New Phase 2 instructions go directly below this line.
+
+
+    // ===== Phase 3: marketplace (added in branch phase3-marketplace) =====
+    // New Phase 3 instructions go directly below this line.
 }
