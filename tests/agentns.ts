@@ -2,27 +2,149 @@ import * as anchor from "@anchor-lang/core";
 import { Program } from "@anchor-lang/core";
 import { Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram } from "@solana/web3.js";
 import { assert } from "chai";
+import { createHash } from "crypto";
 import { Agentns } from "../target/types/agentns";
-import {
-  provider,
-  program,
-  connection,
-  admin,
-  treasury,
-  resolverKey,
-  TEST_CONFIG,
-  MIN_STAKE,
-  configPda,
-  airdrop,
-  fundedKeypair,
-  expectFail,
-  initConfig,
-  ensureConfig,
-  registerName,
-  fetchRecord,
-} from "./helpers";
 
 describe("agentns - phase 1 registry", () => {
+  const provider = anchor.AnchorProvider.env();
+  anchor.setProvider(provider);
+  const program = anchor.workspace.agentns as Program<Agentns>;
+  const connection = provider.connection;
+
+  const admin = (provider.wallet as anchor.Wallet).payer;
+  const treasury = Keypair.generate();
+  const resolverKey = Keypair.generate();
+  const REG_FEE = 10_000_000;
+  const MIN_STAKE = 100_000_000;
+  const SLASH_BPS = 1000;
+  const COOLDOWN_SECS = 2;
+  const MARKETPLACE_FEE_BPS = 250;
+
+  const [configPda] = PublicKey.findProgramAddressSync(
+    [Buffer.from("config")],
+    program.programId
+  );
+
+  const fullName = (
+    protocol: string,
+    agentId: string,
+    capability: string,
+    providerName: string,
+    version: string
+  ) => `${protocol}://${agentId}.${capability}.${providerName}.v${version}`;
+
+  const sha256 = (s: string): number[] =>
+    Array.from(createHash("sha256").update(s).digest());
+
+  const agentPda = (hash: number[]) =>
+    PublicKey.findProgramAddressSync(
+      [Buffer.from("agent"), Buffer.from(hash)],
+      program.programId
+    )[0];
+
+  const airdrop = async (to: PublicKey, sol = 2) => {
+    const sig = await connection.requestAirdrop(to, sol * LAMPORTS_PER_SOL);
+    const latest = await connection.getLatestBlockhash();
+    await connection.confirmTransaction({ signature: sig, ...latest }, "confirmed");
+  };
+
+  const expectFail = async (p: Promise<unknown>, contains: string) => {
+    try {
+      await p;
+    } catch (e: any) {
+      const text = `${e?.error?.errorCode?.code ?? ""} ${e?.message ?? ""} ${String(e)} ${(e?.logs ?? []).join(" ")}`;
+      assert.include(text, contains, `expected error containing "${contains}", got: ${text}`);
+      return;
+    }
+    assert.fail(`expected failure containing "${contains}" but it succeeded`);
+  };
+
+  const register = (
+    owner: Keypair,
+    opts: {
+      protocol?: "mcp" | "a2a" | "acp";
+      agentId?: string;
+      capability?: string;
+      providerName?: string;
+      version?: string;
+      endpoint?: string;
+      agentPubkey?: PublicKey;
+      metadataUri?: string;
+      hashOverride?: number[];
+      stakeLamports?: number;
+    } = {}
+  ) => {
+    const protocol = opts.protocol ?? "mcp";
+    const agentId = opts.agentId ?? "sentiment";
+    const capability = opts.capability ?? "text-analysis";
+    const providerName = opts.providerName ?? "acme";
+    const version = opts.version ?? "1.0";
+    const hash = opts.hashOverride ?? sha256(fullName(protocol, agentId, capability, providerName, version));
+    const record = agentPda(hash);
+    const protocolArg =
+      protocol === "mcp" ? { mcp: {} } : protocol === "a2a" ? { a2a: {} } : { acp: {} };
+    const stake = opts.stakeLamports ?? MIN_STAKE;
+
+    return {
+      record,
+      hash,
+      run: () =>
+        program.methods
+          .registerName(
+            hash,
+            protocolArg,
+            agentId,
+            capability,
+            providerName,
+            version,
+            opts.endpoint ?? "https://sentiment.acme.dev/analyze",
+            opts.agentPubkey ?? Keypair.generate().publicKey,
+            opts.metadataUri ?? "",
+            new anchor.BN(stake)
+          )
+          .accountsPartial({
+            owner: owner.publicKey,
+            config: configPda,
+            treasury: treasury.publicKey,
+            agentRecord: record,
+            systemProgram: SystemProgram.programId,
+          })
+          .signers([owner])
+          .rpc(),
+    };
+  };
+
+  const initConfig = async () => {
+    await program.methods
+      .initializeConfig(
+        treasury.publicKey,
+        resolverKey.publicKey,
+        new anchor.BN(REG_FEE),
+        new anchor.BN(MIN_STAKE),
+        SLASH_BPS,
+        // `unstake_cooldown_secs` is an i64, so it must be a BN. A plain number
+        // makes the borsh encoder call `.toTwos()` on it and throw.
+        new anchor.BN(COOLDOWN_SECS),
+        MARKETPLACE_FEE_BPS
+      )
+      .accountsPartial({
+        admin: admin.publicKey,
+        config: configPda,
+        systemProgram: SystemProgram.programId,
+      })
+      .rpc();
+  };
+
+  const ensureConfig = async () => {
+    try {
+      await program.account.registryConfig.fetch(configPda);
+    } catch {
+      await initConfig();
+    }
+  };
+
+  const fetchRecord = (pda: PublicKey) => program.account.agentRecord.fetch(pda);
+
   const alice = Keypair.generate();
   const bob = Keypair.generate();
 
@@ -34,24 +156,23 @@ describe("agentns - phase 1 registry", () => {
 
   // ---- config --------------------------------------------------------------
 
-  // Initializes the registry config and checks all fields including new Phase 2/3 fields.
   it("initializes the registry config", async () => {
-    await initConfig();
-
+    // Config should already be initialized from before hook
     const cfg = await program.account.registryConfig.fetch(configPda);
     assert.equal(cfg.admin.toBase58(), admin.publicKey.toBase58());
     assert.equal(cfg.treasury.toBase58(), treasury.publicKey.toBase58());
     assert.equal(cfg.resolverPubkey.toBase58(), resolverKey.publicKey.toBase58());
-    assert.equal(cfg.registrationFeeLamports.toNumber(), TEST_CONFIG.registrationFee);
-    // New fields from shared base
-    assert.equal(cfg.minStakeLamports.toNumber(), TEST_CONFIG.minStake);
-    assert.equal(cfg.slashBps, TEST_CONFIG.slashBps);
-    assert.equal(cfg.unstakeCooldownSecs, TEST_CONFIG.cooldownSecs);
-    assert.equal(cfg.marketplaceFeeBps, TEST_CONFIG.marketplaceFeeBps);
+    assert.equal(cfg.registrationFeeLamports.toNumber(), REG_FEE);
+    assert.equal(cfg.minStakeLamports.toNumber(), MIN_STAKE);
+    assert.equal(cfg.slashBps, SLASH_BPS);
+    assert.equal(cfg.unstakeCooldownSecs, COOLDOWN_SECS);
+    assert.equal(cfg.marketplaceFeeBps, MARKETPLACE_FEE_BPS);
+    assert.deepEqual(cfg.verifiers, []);
+    assert.equal(cfg.unstakeCooldownSecs, COOLDOWN_SECS);
+    assert.equal(cfg.marketplaceFeeBps, MARKETPLACE_FEE_BPS);
     assert.deepEqual(cfg.verifiers, []);
   });
 
-  // Admin can rotate resolver key and other new config fields.
   it("lets the admin rotate the resolver key", async () => {
     await ensureConfig();
     const newKey = Keypair.generate();
@@ -70,7 +191,6 @@ describe("agentns - phase 1 registry", () => {
     assert.equal(cfg.resolverPubkey.toBase58(), resolverKey.publicKey.toBase58());
   });
 
-  // Non-admin cannot update config.
   it("rejects config updates from a non-admin", async () => {
     await ensureConfig();
     await expectFail(
@@ -85,11 +205,10 @@ describe("agentns - phase 1 registry", () => {
 
   // ---- register ------------------------------------------------------------
 
-  // Registering a name charges the fee and initializes stake to MIN_STAKE.
   it("registers a name and charges the fee", async () => {
     await ensureConfig();
     const before = await connection.getBalance(treasury.publicKey);
-    const r = registerName(alice);
+    const r = register(alice);
     await r.run();
 
     const rec = await fetchRecord(r.record);
@@ -98,53 +217,46 @@ describe("agentns - phase 1 registry", () => {
     assert.equal(rec.endpoint, "https://sentiment.acme.dev/analyze");
     assert.deepEqual(rec.status, { active: {} });
     assert.deepEqual(rec.protocol, { mcp: {} });
-    // Stake is now MIN_STAKE (not 0)
     assert.equal(rec.stakeLamports.toNumber(), MIN_STAKE);
     assert.equal(rec.passes, 0);
     assert.equal(rec.fails, 0);
 
     const after = await connection.getBalance(treasury.publicKey);
-    assert.equal(after - before, TEST_CONFIG.registrationFee);
+    assert.equal(after - before, REG_FEE);
   });
 
-  // Duplicate name registration fails.
   it("rejects a duplicate name", async () => {
-    await expectFail(registerName(bob).run(), "already in use");
+    await expectFail(register(bob).run(), "already in use");
   });
 
-  // Wrong name_hash fails.
   it("rejects a name_hash that does not match the name", async () => {
     const wrong = sha256("totally-different-name");
     await expectFail(
-      registerName(alice, { agentId: "other-agent", hashOverride: wrong }).run(),
+      register(alice, { agentId: "other-agent", hashOverride: wrong }).run(),
       "NameHashMismatch"
     );
   });
 
-  // Non-HTTPS endpoint fails.
   it("rejects a non-https endpoint", async () => {
     await expectFail(
-      registerName(alice, { agentId: "plain-http", endpoint: "http://insecure.example.com" }).run(),
+      register(alice, { agentId: "plain-http", endpoint: "http://insecure.example.com" }).run(),
       "InvalidEndpoint"
     );
   });
 
-  // Uppercase in name part fails.
   it("rejects an invalid name part (uppercase)", async () => {
-    await expectFail(registerName(alice, { agentId: "BadName" }).run(), "InvalidNamePart");
+    await expectFail(register(alice, { agentId: "BadName" }).run(), "InvalidNamePart");
   });
 
-  // Invalid version format fails.
   it("rejects an invalid version", async () => {
-    await expectFail(registerName(alice, { agentId: "bad-version", version: "1" }).run(), "InvalidVersion");
+    await expectFail(register(alice, { agentId: "bad-version", version: "1" }).run(), "InvalidVersion");
   });
 
   // ---- update --------------------------------------------------------------
 
-  // Owner can update endpoint.
   it("lets the owner update the endpoint", async () => {
     await ensureConfig();
-    const r = registerName(alice);
+    const r = register(alice);
     const newAgentKey = Keypair.generate().publicKey;
     await program.methods
       .updateEndpoint("https://new.acme.dev/v2", newAgentKey, "https://acme.dev/agent.json")
@@ -158,10 +270,9 @@ describe("agentns - phase 1 registry", () => {
     assert.equal(rec.metadataUri, "https://acme.dev/agent.json");
   });
 
-  // Non-owner cannot update endpoint.
   it("rejects endpoint updates from a non-owner", async () => {
     await ensureConfig();
-    const r = registerName(alice);
+    const r = register(alice);
     await expectFail(
       program.methods
         .updateEndpoint("https://evil.example.com", Keypair.generate().publicKey, "")
@@ -174,10 +285,9 @@ describe("agentns - phase 1 registry", () => {
 
   // ---- transfer ------------------------------------------------------------
 
-  // Transfer changes owner.
   it("transfers a name to a new owner", async () => {
     await ensureConfig();
-    const r = registerName(alice, { agentId: "movable" });
+    const r = register(alice, { agentId: "movable" });
     await r.run();
 
     await program.methods
@@ -189,7 +299,6 @@ describe("agentns - phase 1 registry", () => {
     const rec = await fetchRecord(r.record);
     assert.equal(rec.owner.toBase58(), bob.publicKey.toBase58());
 
-    // old owner is locked out
     await expectFail(
       program.methods
         .updateEndpoint("https://alice.example.com", Keypair.generate().publicKey, "")
@@ -199,7 +308,6 @@ describe("agentns - phase 1 registry", () => {
       "NotOwner"
     );
 
-    // new owner can update
     await program.methods
       .updateEndpoint("https://bob.example.com", Keypair.generate().publicKey, "")
       .accountsPartial({ owner: bob.publicKey, agentRecord: r.record })
@@ -207,10 +315,9 @@ describe("agentns - phase 1 registry", () => {
       .rpc();
   });
 
-  // Cannot transfer to self.
   it("rejects transferring to the same owner", async () => {
     await ensureConfig();
-    const r = registerName(alice);
+    const r = register(alice);
     await expectFail(
       program.methods
         .transferName(alice.publicKey)
@@ -223,10 +330,9 @@ describe("agentns - phase 1 registry", () => {
 
   // ---- revoke --------------------------------------------------------------
 
-  // Revoke marks name revoked and keeps it reserved.
   it("revokes a name and keeps it reserved", async () => {
     await ensureConfig();
-    const r = registerName(alice, { agentId: "short-lived" });
+    const r = register(alice, { agentId: "short-lived" });
     await r.run();
 
     await program.methods
@@ -238,7 +344,6 @@ describe("agentns - phase 1 registry", () => {
     const rec = await fetchRecord(r.record);
     assert.deepEqual(rec.status, { revoked: {} });
 
-    // cannot update a revoked name
     await expectFail(
       program.methods
         .updateEndpoint("https://again.example.com", Keypair.generate().publicKey, "")
@@ -248,7 +353,6 @@ describe("agentns - phase 1 registry", () => {
       "NameRevoked"
     );
 
-    // nobody can re-register it (stays reserved)
-    await expectFail(registerName(bob, { agentId: "short-lived" }).run(), "already in use");
+    await expectFail(register(bob, { agentId: "short-lived" }).run(), "already in use");
   });
 });

@@ -82,5 +82,20 @@ pub struct AgentRecord {
     pub unstake_requested_at: i64,
     /// Whether the endpoint has been verified by a verifier (Phase 2).
     pub endpoint_verified: bool,
+    /// IPFS CID (32 bytes) of the agent's logo (Phase 3).
+    pub logo_cid: [u8; 32],
+    /// Whether the logo has been verified (Phase 3).
+    pub logo_verified: bool,
+    pub bump: u8,
+}
+
+/// An offer to sell one agent name at a fixed price. PDA: ["listing", agent_record].
+#[account]
+#[derive(InitSpace)]
+pub struct Listing {
+    pub seller: Pubkey,
+    pub agent_record: Pubkey,
+    pub price_lamports: u64,
+    pub created_at: i64,
     pub bump: u8,
 }
