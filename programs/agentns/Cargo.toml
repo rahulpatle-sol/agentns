@@ -1,0 +1,29 @@
+[package]
+name = "agentns"
+version = "0.1.0"
+description = "AgentNS - on-chain name registry for AI agents (Phase 1: registry)"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "agentns"
+
+[features]
+default = []
+cpi = ["no-entrypoint"]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+idl-build = ["anchor-lang/idl-build"]
+anchor-debug = []
+custom-heap = []
+custom-panic = []
+
+[dependencies]
+anchor-lang = "1.2.1"
+# anchor-lang 1.x no longer re-exports solana_program::hash, so we use the hasher crate directly.
+# On-chain it uses the sol_sha256 syscall; the "sha2" feature only affects host builds/tests.
+solana-sha256-hasher = { version = "3.1.0", features = ["sha2"] }
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }
