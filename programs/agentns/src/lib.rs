@@ -106,12 +106,33 @@ pub mod agentns {
 
     pub fn revoke_name(ctx: Context<RevokeName>) -> Result<()> {
         handle_revoke_name(ctx)
-    }
+}
 
-    // ===== Phase 2: trust / stake (added in branch phase2-trust) =====
+// ===== Phase 2: trust / stake (added in branch phase2-trust) =====
     // New Phase 2 instructions go directly below this line.
 
 
     // ===== Phase 3: marketplace (added in branch phase3-marketplace) =====
     // New Phase 3 instructions go directly below this line.
+
+
+    pub fn list_name(
+        ctx: Context<ListName>,
+        price_lamports: u64,
+    ) -> Result<()> {
+        handle_list_name(ctx, price_lamports)
+    }
+
+    pub fn cancel_listing(
+        ctx: Context<CancelListing>,
+    ) -> Result<()> {
+        handle_cancel_listing(ctx)
+    }
+
+    pub fn buy_name(
+        ctx: Context<BuyName>,
+        max_price_lamports: u64,
+    ) -> Result<()> {
+        handle_buy_name(ctx, max_price_lamports)
+    }
 }

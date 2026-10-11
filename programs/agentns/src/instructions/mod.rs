@@ -19,4 +19,18 @@ pub use update_endpoint::*;
 
 
 // ===== Phase 3: marketplace (added in branch phase3-marketplace) =====
+pub mod list_name;
+pub mod cancel_listing;
+pub mod buy_name;
+
+pub use list_name::*;
+pub use cancel_listing::*;
+pub use buy_name::*;
+
+
+// ===== Phase 2: trust / stake (added in branch phase2-trust) =====
+// New `pub mod` and `pub use` lines for Phase 2 go directly below this line.
+
+
+// ===== Phase 3: marketplace (added in branch phase3-marketplace) =====
 // New `pub mod` and `pub use` lines for Phase 3 go directly below this line.

@@ -1,0 +1,9 @@
+# The Anchor root has its own pnpm-workspace.yaml. Declaring this file makes `app/`
+# a self-contained workspace root, so installing the frontend can never touch the
+# program lockfile that `anchor test` relies on.
+packages:
+  - '.'
+
+# Vite needs esbuild's native binary, which ships via a postinstall script.
+allowBuilds:
+  esbuild: true
