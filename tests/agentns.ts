@@ -355,4 +355,180 @@ describe("agentns - phase 1 registry", () => {
 
     await expectFail(register(bob, { agentId: "short-lived" }).run(), "already in use");
   });
+
+  // ---- marketplace ----------------------------------------------------------
+
+  const listingPda = (record: PublicKey) =>
+    PublicKey.findProgramAddressSync(
+      [Buffer.from("listing"), record.toBuffer()],
+      program.programId
+    )[0];
+
+  const listName = (
+    owner: Keypair,
+    record: PublicKey,
+    priceLamports: number
+  ) =>
+    program.methods
+      .listName(new anchor.BN(priceLamports))
+      .accountsPartial({
+        owner: owner.publicKey,
+        agentRecord: record,
+        listing: listingPda(record),
+        systemProgram: SystemProgram.programId,
+      })
+      .signers([owner])
+      .rpc();
+
+  const cancelListing = (
+    seller: Keypair,
+    record: PublicKey
+  ) =>
+    program.methods
+      .cancelListing()
+      .accountsPartial({
+        seller: seller.publicKey,
+        agentRecord: record,
+        listing: listingPda(record),
+        systemProgram: SystemProgram.programId,
+      })
+      .signers([seller])
+      .rpc();
+
+  const buyName = (
+    buyer: Keypair,
+    record: PublicKey,
+    seller: PublicKey,
+    maxPriceLamports: number
+  ) =>
+    program.methods
+      .buyName(new anchor.BN(maxPriceLamports))
+      .accountsPartial({
+        buyer: buyer.publicKey,
+        config: configPda,
+        treasury: treasury.publicKey,
+        seller,
+        agentRecord: record,
+        listing: listingPda(record),
+        systemProgram: SystemProgram.programId,
+      })
+      .signers([buyer])
+      .rpc();
+
+  it("lists a name for sale", async () => {
+    await ensureConfig();
+    const r = register(alice, { agentId: "for-sale" });
+    await r.run();
+
+    const price = 50_000_000;
+    await listName(alice, r.record, price);
+
+    const listing = await program.account.listing.fetch(listingPda(r.record));
+    assert.equal(listing.seller.toBase58(), alice.publicKey.toBase58());
+    assert.equal(listing.agentRecord.toBase58(), r.record.toBase58());
+    assert.equal(listing.priceLamports.toNumber(), price);
+    assert.equal(listing.createdAt.toNumber() > 0, true);
+  });
+
+  it("rejects listing with zero price", async () => {
+    await ensureConfig();
+    const r = register(alice, { agentId: "zero-price" });
+    await r.run();
+
+    await expectFail(listName(alice, r.record, 0), "InvalidPrice");
+  });
+
+  it("rejects listing a revoked name", async () => {
+    await ensureConfig();
+    const r = register(alice, { agentId: "revoked-list" });
+    await r.run();
+    await program.methods
+      .revokeName()
+      .accountsPartial({ owner: alice.publicKey, agentRecord: r.record })
+      .signers([alice])
+      .rpc();
+
+    await expectFail(listName(alice, r.record, 1_000_000), "NameRevoked");
+  });
+
+  it("cancels a listing and refunds rent to seller", async () => {
+    await ensureConfig();
+    const r = register(alice, { agentId: "cancel-me" });
+    await r.run();
+    await listName(alice, r.record, 50_000_000);
+
+    const sellerBalanceBefore = await connection.getBalance(alice.publicKey);
+    const listingPdaKey = listingPda(r.record);
+    const listingBalanceBefore = await connection.getBalance(listingPdaKey);
+
+    await cancelListing(alice, r.record);
+
+    const sellerBalanceAfter = await connection.getBalance(alice.publicKey);
+    assert.equal(sellerBalanceAfter > sellerBalanceBefore, true);
+
+    try {
+      await program.account.listing.fetch(listingPdaKey);
+      assert.fail("listing account should be closed");
+    } catch {
+    }
+  });
+
+  it("rejects cancel from non-seller", async () => {
+    await ensureConfig();
+    const r = register(alice, { agentId: "not-seller-cancel" });
+    await r.run();
+    await listName(alice, r.record, 50_000_000);
+
+    await expectFail(cancelListing(bob, r.record), "NotOwner");
+  });
+
+  it("buys a name and splits payment correctly", async () => {
+    await ensureConfig();
+    const r = register(alice, { agentId: "buy-me" });
+    await r.run();
+    const price = 80_000_000;
+    await listName(alice, r.record, price);
+
+    const expectedFee = Math.floor((price * MARKETPLACE_FEE_BPS) / 10_000);
+    const expectedSellerAmount = price - expectedFee;
+
+    const treasuryBefore = await connection.getBalance(treasury.publicKey);
+    const sellerBefore = await connection.getBalance(alice.publicKey);
+
+    await buyName(bob, r.record, alice.publicKey, price);
+
+    const treasuryAfter = await connection.getBalance(treasury.publicKey);
+    const sellerAfter = await connection.getBalance(alice.publicKey);
+
+    assert.equal(treasuryAfter - treasuryBefore, expectedFee);
+    assert.equal(sellerAfter - sellerBefore, expectedSellerAmount);
+
+    const rec = await fetchRecord(r.record);
+    assert.equal(rec.owner.toBase58(), bob.publicKey.toBase58());
+    assert.equal(rec.endpointVerified, false);
+
+    try {
+      await program.account.listing.fetch(listingPda(r.record));
+      assert.fail("listing account should be closed after purchase");
+    } catch {
+    }
+  });
+
+  it("rejects buying with max price below listing", async () => {
+    await ensureConfig();
+    const r = register(alice, { agentId: "price-too-low" });
+    await r.run();
+    await listName(alice, r.record, 100_000_000);
+
+    await expectFail(buyName(bob, r.record, alice.publicKey, 50_000_000), "PriceAboveMax");
+  });
+
+  it("rejects buying your own listing", async () => {
+    await ensureConfig();
+    const r = register(alice, { agentId: "buy-own" });
+    await r.run();
+    await listName(alice, r.record, 50_000_000);
+
+    await expectFail(buyName(alice, r.record, alice.publicKey, 100_000_000), "CannotBuyOwnName");
+  });
 });

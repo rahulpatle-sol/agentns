@@ -22,8 +22,12 @@ pub struct CancelListing<'info> {
     pub seller: Signer<'info>,
 
     #[account(
+        mut,
         seeds = [LISTING_SEED, agent_record.key().as_ref()],
         bump = listing.bump,
+        has_one = seller @ AgentNsError::NotOwner,
+        constraint = listing.agent_record == agent_record.key() @ AgentNsError::ListingMismatch,
+        close = seller
     )]
     pub listing: Account<'info, Listing>,
 

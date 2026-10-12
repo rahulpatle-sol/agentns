@@ -21,13 +21,9 @@ pub fn handle_list_name(
 
     let listing_bump = ctx.bumps.listing;
 
-    // Check stale: listing.seller must equal agent_record.owner
-    require!(
-        ctx.accounts.listing.seller == ctx.accounts.agent_record.owner,
-        AgentNsError::ListingStale
-    );
-
-    ctx.accounts.listing.seller = ctx.accounts.agent_record.owner.clone();
+    // The listing account is brand new (`init`), so every field must be set here.
+    ctx.accounts.listing.seller = ctx.accounts.agent_record.owner;
+    ctx.accounts.listing.agent_record = ctx.accounts.agent_record.key();
     ctx.accounts.listing.price_lamports = price_lamports;
     ctx.accounts.listing.created_at = Clock::get()?.unix_timestamp;
     ctx.accounts.listing.bump = listing_bump;

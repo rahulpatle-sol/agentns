@@ -5,7 +5,7 @@ package_manager = "pnpm"
 resolution = true
 skip-lint = false
 
-[programs.localnet]
+[programs.devnet]
 agentns = "3CZ5JZgJdxX2wt8UbmyP9kkHPmiMnHhnbsUAXWj7XdnD"
 
 [provider]

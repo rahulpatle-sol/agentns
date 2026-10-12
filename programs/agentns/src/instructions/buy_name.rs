@@ -1,4 +1,6 @@
 use anchor_lang::prelude::*;
+use anchor_lang::system_program;
+
 
 use crate::constants::{CONFIG_SEED, LISTING_SEED};
 use crate::errors::AgentNsError;
@@ -41,19 +43,37 @@ pub fn handle_buy_name(
     );
 
     // Money: compute fee and seller_amount
-    let fee = listing.price_lamports * ctx.accounts.config.marketplace_fee_bps as u64 / 10_000;
+    let fee = listing
+        .price_lamports
+        .checked_mul(ctx.accounts.config.marketplace_fee_bps as u64)
+        .ok_or(AgentNsError::MathOverflow)?
+        / 10_000;
     let seller_amount = listing.price_lamports.saturating_sub(fee);
 
-    // If fee > 0: System transfer buyer -> treasury
     if fee > 0 {
-        **ctx.accounts.treasury.lamports.borrow_mut() += fee;
-        **ctx.accounts.buyer.lamports.borrow_mut() -= fee;
+        system_program::transfer(
+            CpiContext::new(
+                ctx.accounts.system_program.key(),
+                system_program::Transfer {
+                    from: ctx.accounts.buyer.to_account_info(),
+                    to: ctx.accounts.treasury.to_account_info(),
+                },
+            ),
+            fee,
+        )?;
     }
 
-    // System transfer buyer -> seller for seller_amount
     if seller_amount > 0 {
-        **ctx.accounts.seller.lamports.borrow_mut() += seller_amount;
-        **ctx.accounts.buyer.lamports.borrow_mut() -= seller_amount;
+        system_program::transfer(
+            CpiContext::new(
+                ctx.accounts.system_program.key(),
+                system_program::Transfer {
+                    from: ctx.accounts.buyer.to_account_info(),
+                    to: ctx.accounts.seller.to_account_info(),
+                },
+            ),
+            seller_amount,
+        )?;
     }
 
     // Then: record.owner = buyer, record.updated_at = now, record.endpoint_verified = false
