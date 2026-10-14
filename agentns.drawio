@@ -1,0 +1,878 @@
+<mxfile host="65bd71144e">
+    <diagram id="page1" name="Protocol Requirements + Overview">
+        <mxGraphModel dx="782" dy="564" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title1" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontStyle=1;fontFamily=IBM Plex Sans;" value="Protocol Requirements" vertex="1">
+                    <mxGeometry height="30" width="300" x="275" y="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="reqbox" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fontSize=11;fontFamily=IBM Plex Sans;" value="&lt;b&gt;Protocol Requirements&lt;/b&gt;&lt;br&gt;1. The protocol shall allow a user to register a unique agent name in the format protocol://agentid.capability.provider.vVERSION&lt;br&gt;2. The protocol shall store one on-chain record per name, addressed by the SHA-256 hash of the full name&lt;br&gt;3. The protocol shall allow the owner to update the endpoint, transfer the name, or revoke it&lt;br&gt;4. The protocol shall keep a revoked name reserved so nobody else can impersonate it&lt;br&gt;5. The protocol shall require a minimum stake (SOL) to register, held inside the agent record&lt;br&gt;6. The protocol shall charge a registration fee, sent to the treasury&lt;br&gt;7. The protocol shall allow admin-approved verifiers to report challenge results (pass or fail)&lt;br&gt;8. The protocol shall slash a share of the stake (default 10%) to the treasury when a challenge fails&lt;br&gt;9. The protocol shall allow unstaking only after a cooldown, and keep a revoked name slashable during the cooldown&lt;br&gt;10. The protocol shall mark an endpoint as verified only after the agent proves it controls its key&lt;br&gt;11. The protocol shall allow an owner to list a name at a fixed price and anyone to buy it in one transaction&lt;br&gt;12. The protocol shall charge a sale fee (at most 10%), sent to the treasury; stake and reputation move with the name&lt;br&gt;13. The protocol shall serve name lookups through a resolver that signs every answer, with the signing key stored on-chain&lt;br&gt;14. The protocol shall index all on-chain events and show every agent&#39;s history in a public Explorer" vertex="1">
+                    <mxGeometry height="280" width="750" x="50" y="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="title1b" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontStyle=1;fontFamily=IBM Plex Sans;" value="Overview" vertex="1">
+                    <mxGeometry height="30" width="150" x="350" y="350" as="geometry"/>
+                </mxCell>
+                <mxCell id="progbox" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fontSize=11;fontFamily=IBM Plex Sans;strokeWidth=2;" value="&lt;b&gt;AgentNS Program&lt;/b&gt;&lt;br&gt;+ owner: Pubkey&lt;br&gt;+ name: String&lt;br&gt;+ endpoint: String&lt;br&gt;+ agent_pubkey: Pubkey&lt;br&gt;+ status: Active | Revoked&lt;br&gt;+ stake_lamports: u64&lt;br&gt;+ passes: u32&lt;br&gt;+ fails: u32&lt;br&gt;+ unstake_requested_at: i64&lt;br&gt;+ endpoint_verified: bool" vertex="1">
+                    <mxGeometry height="200" width="350" x="250" y="400" as="geometry"/>
+                </mxCell>
+                <mxCell id="owner1" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=11;fontFamily=IBM Plex Sans;" value="Owner" vertex="1">
+                    <mxGeometry height="60" width="30" x="680" y="420" as="geometry"/>
+                </mxCell>
+                <mxCell id="verifier1" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=11;fontFamily=IBM Plex Sans;" value="Verifier" vertex="1">
+                    <mxGeometry height="60" width="30" x="680" y="520" as="geometry"/>
+                </mxCell>
+                <mxCell id="treasury1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;strokeWidth=2;" value="Treasury" vertex="1">
+                    <mxGeometry height="40" width="150" x="350" y="650" as="geometry"/>
+                </mxCell>
+                <mxCell id="arr1" edge="1" parent="1" source="owner1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.3;entryDx=0;entryDy=0;strokeColor=#00AA00;strokeWidth=2;fontSize=10;fontFamily=IBM Plex Sans;" target="progbox" value="1 - Registers name + stake">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arr2" edge="1" parent="1" source="progbox" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#00AA00;strokeWidth=2;fontSize=10;fontFamily=IBM Plex Sans;" target="treasury1" value="2 - Fee sent to treasury">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arr3" edge="1" parent="1" source="verifier1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.7;entryDx=0;entryDy=0;strokeColor=#0000CC;strokeWidth=2;fontSize=10;fontFamily=IBM Plex Sans;" target="progbox" value="3 - Reports challenge">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arr4" edge="1" parent="1" source="progbox" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#0000CC;strokeWidth=2;fontSize=10;fontFamily=IBM Plex Sans;" target="treasury1" value="4 - Failed challenge slashes stake">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arr5" edge="1" parent="1" source="owner1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0;exitY=0.8;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#8B0000;strokeWidth=2;fontSize=10;fontFamily=IBM Plex Sans;" target="progbox" value="5 - Requests unstake">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arr6" edge="1" parent="1" source="progbox" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#8B0000;strokeWidth=2;fontSize=10;fontFamily=IBM Plex Sans;" target="owner1" value="6 - Stake returned after cooldown">
+                    <mxGeometry relative="1" x="-0.0067" y="-10" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="stepsbox" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fontSize=11;fontFamily=IBM Plex Sans;" value="&lt;b&gt;Steps&lt;/b&gt;&lt;br&gt;1 - Owner registers a name: the program checks the name rules and hash; the record is created and the stake is held inside it&lt;br&gt;2 - Fee goes to the treasury&lt;br&gt;3 - Verifier tests the agent endpoint and reports pass or fail on-chain&lt;br&gt;4 - On a fail the program takes 10% of the stake and clears the endpoint-verified flag&lt;br&gt;5 - Owner requests unstake; revoking a name does this automatically&lt;br&gt;6 - After the cooldown the owner withdraws the remaining stake" vertex="1">
+                    <mxGeometry height="120" width="750" x="50" y="720" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="page2" name="Register Name">
+        <mxGraphModel dx="1372" dy="989" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title2" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontStyle=1;fontFamily=IBM Plex Sans;" value="Register Name" vertex="1">
+                    <mxGeometry height="30" width="200" x="325" y="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="owner2" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=11;fontFamily=IBM Plex Sans;" value="Owner" vertex="1">
+                    <mxGeometry height="60" width="30" x="100" y="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="s2a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Enters name, endpoint and stake" vertex="1">
+                    <mxGeometry height="40" width="250" x="200" y="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="s2b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Client computes SHA-256 of the full name" vertex="1">
+                    <mxGeometry height="40" width="250" x="200" y="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="d2a" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="Name valid?&#xa;(rules + hash match)" vertex="1">
+                    <mxGeometry height="80" width="150" x="250" y="220" as="geometry"/>
+                </mxCell>
+                <mxCell id="err2a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Throw error /&#xa;Fail transaction" vertex="1">
+                    <mxGeometry height="40" width="150" x="550" y="230" as="geometry"/>
+                </mxCell>
+                <mxCell id="d2b" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="Name already&#xa;registered?" vertex="1">
+                    <mxGeometry height="80" width="150" x="250" y="330" as="geometry"/>
+                </mxCell>
+                <mxCell id="err2b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Throw error /&#xa;Fail transaction" vertex="1">
+                    <mxGeometry height="40" width="150" x="550" y="340" as="geometry"/>
+                </mxCell>
+                <mxCell id="s2c" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Registration fee sent to treasury" vertex="1">
+                    <mxGeometry height="40" width="250" x="200" y="440" as="geometry"/>
+                </mxCell>
+                <mxCell id="s2d" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Stake moved into the agent record" vertex="1">
+                    <mxGeometry height="40" width="250" x="200" y="510" as="geometry"/>
+                </mxCell>
+                <mxCell id="s2e" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Agent record created" vertex="1">
+                    <mxGeometry height="40" width="250" x="200" y="580" as="geometry"/>
+                </mxCell>
+                <mxCell id="s2f" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Registered event emitted" vertex="1">
+                    <mxGeometry height="40" width="250" x="200" y="650" as="geometry"/>
+                </mxCell>
+                <mxCell id="merge2" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="" vertex="1">
+                    <mxGeometry height="30" width="30" x="310" y="720" as="geometry"/>
+                </mxCell>
+                <mxCell id="end2" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="X" vertex="1">
+                    <mxGeometry height="20" width="20" x="315" y="780" as="geometry"/>
+                </mxCell>
+                <mxCell id="note2a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fontSize=10;fontFamily=IBM Plex Sans;arcSize=20;" value="Name rules: lowercase letters, numbers and &#39;-&#39;, 1 to 32 characters; version like 1.0; endpoint starts with https://" vertex="1">
+                    <mxGeometry height="50" width="250" x="550" y="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="note2b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fontSize=10;fontFamily=IBM Plex Sans;arcSize=20;" value="Record address = hash of the full name, so one name can never get two accounts" vertex="1">
+                    <mxGeometry height="50" width="250" x="550" y="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="desc2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fontSize=11;fontFamily=IBM Plex Sans;" value="&lt;b&gt;Register Name&lt;/b&gt;&lt;br&gt;- Name must match protocol://agentid.capability.provider.vVERSION&lt;br&gt;- Hash of the full name is the record address&lt;br&gt;- Registration fee goes to the treasury&lt;br&gt;- Stake is locked inside the agent record&lt;br&gt;- A revoked name stays reserved" vertex="1">
+                    <mxGeometry height="120" width="400" x="50" y="850" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2a" edge="1" parent="1" source="owner2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="s2a">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2b" edge="1" parent="1" source="s2a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s2b">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2c" edge="1" parent="1" source="s2b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="d2a">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2d" edge="1" parent="1" source="d2a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=10;" target="err2a" value="no">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2e" edge="1" parent="1" source="d2a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;" target="d2b" value="yes">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2f" edge="1" parent="1" source="d2b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=10;" target="err2b" value="yes">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2g" edge="1" parent="1" source="d2b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;" target="s2c" value="no">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2h" edge="1" parent="1" source="s2c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s2d">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2i" edge="1" parent="1" source="s2d" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s2e">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2j" edge="1" parent="1" source="s2e" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s2f">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2k" edge="1" parent="1" source="s2f" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="merge2">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2l" edge="1" parent="1" source="merge2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="end2">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="en2a" edge="1" parent="1" source="note2a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;endArrow=none;" target="s2a">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="en2b" edge="1" parent="1" source="note2b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;endArrow=none;" target="s2b">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="page3" name="Update and Verify Endpoint">
+        <mxGraphModel dx="1241" dy="895" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title3" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontStyle=1;fontFamily=IBM Plex Sans;" value="Update and Verify Endpoint" vertex="1">
+                    <mxGeometry height="30" width="350" x="250" y="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="left3title" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;fontFamily=IBM Plex Sans;" value="Update endpoint" vertex="1">
+                    <mxGeometry height="25" width="150" x="100" y="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="owner3a" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=11;fontFamily=IBM Plex Sans;" value="Owner" vertex="1">
+                    <mxGeometry height="60" width="30" x="50" y="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="s3a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Updates endpoint, key or metadata" vertex="1">
+                    <mxGeometry height="40" width="220" x="100" y="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="d3a" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="Caller is the owner&#xa;and name is active?" vertex="1">
+                    <mxGeometry height="80" width="160" x="130" y="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="err3a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Throw error /&#xa;Fail transaction" vertex="1">
+                    <mxGeometry height="40" width="150" x="100" y="290" as="geometry"/>
+                </mxCell>
+                <mxCell id="s3b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Record updated" vertex="1">
+                    <mxGeometry height="40" width="220" x="100" y="360" as="geometry"/>
+                </mxCell>
+                <mxCell id="s3c" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Endpoint-verified flag cleared" vertex="1">
+                    <mxGeometry height="40" width="220" x="100" y="430" as="geometry"/>
+                </mxCell>
+                <mxCell id="end3a" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="X" vertex="1">
+                    <mxGeometry height="20" width="20" x="200" y="500" as="geometry"/>
+                </mxCell>
+                <mxCell id="right3title" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;fontFamily=IBM Plex Sans;" value="Verify endpoint" vertex="1">
+                    <mxGeometry height="25" width="150" x="500" y="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="verifier3" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=11;fontFamily=IBM Plex Sans;" value="Verifier" vertex="1">
+                    <mxGeometry height="60" width="30" x="450" y="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="s3d" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Sends random challenge to the agent" vertex="1">
+                    <mxGeometry height="40" width="250" x="500" y="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="s3e" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Agent signs it with its agent key" vertex="1">
+                    <mxGeometry height="40" width="250" x="500" y="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="d3b" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="Signature valid?" vertex="1">
+                    <mxGeometry height="70" width="130" x="560" y="250" as="geometry"/>
+                </mxCell>
+                <mxCell id="s3f" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Stop, flag stays off" vertex="1">
+                    <mxGeometry height="40" width="250" x="500" y="350" as="geometry"/>
+                </mxCell>
+                <mxCell id="d3c" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="Caller is an&#xa;approved verifier?" vertex="1">
+                    <mxGeometry height="70" width="130" x="560" y="420" as="geometry"/>
+                </mxCell>
+                <mxCell id="err3b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Throw error /&#xa;Fail transaction" vertex="1">
+                    <mxGeometry height="40" width="150" x="500" y="520" as="geometry"/>
+                </mxCell>
+                <mxCell id="s3g" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Endpoint-verified flag set" vertex="1">
+                    <mxGeometry height="40" width="250" x="500" y="590" as="geometry"/>
+                </mxCell>
+                <mxCell id="end3b" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="X" vertex="1">
+                    <mxGeometry height="20" width="20" x="615" y="660" as="geometry"/>
+                </mxCell>
+                <mxCell id="desc3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fontSize=11;fontFamily=IBM Plex Sans;" value="&lt;b&gt;Update and Verify Endpoint&lt;/b&gt;&lt;br&gt;- Only the owner can update endpoint, key or metadata&lt;br&gt;- Updating clears the endpoint-verified flag&lt;br&gt;- Verifier sends a random challenge to the agent&lt;br&gt;- Agent signs with its agent key&lt;br&gt;- Only an approved verifier can set the verified flag" vertex="1">
+                    <mxGeometry height="120" width="400" x="50" y="750" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3a" edge="1" parent="1" source="owner3a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="s3a">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3b" edge="1" parent="1" source="s3a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="d3a">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3c" edge="1" parent="1" source="d3a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;" target="err3a" value="no">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3d" edge="1" parent="1" source="d3a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontSize=10;" target="s3b" value="yes">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3e" edge="1" parent="1" source="s3b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s3c">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3f" edge="1" parent="1" source="s3c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="end3a">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3g" edge="1" parent="1" source="verifier3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="s3d">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3h" edge="1" parent="1" source="s3d" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s3e">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3i" edge="1" parent="1" source="s3e" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="d3b">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3j" edge="1" parent="1" source="d3b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;" target="s3f" value="no">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3k" edge="1" parent="1" source="d3b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontSize=10;" target="d3c" value="yes">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3l" edge="1" parent="1" source="d3c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;" target="err3b" value="no">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3m" edge="1" parent="1" source="d3c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontSize=10;" target="s3g" value="yes">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3n" edge="1" parent="1" source="s3g" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="end3b">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="page4" name="Challenge and Slash">
+        <mxGraphModel dx="1150" dy="829" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title4" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontStyle=1;fontFamily=IBM Plex Sans;" value="Challenge and Slash" vertex="1">
+                    <mxGeometry height="30" width="250" x="300" y="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="verifier4" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=11;fontFamily=IBM Plex Sans;" value="Verifier" vertex="1">
+                    <mxGeometry height="60" width="30" x="100" y="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="s4a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Sends test request to the agent endpoint" vertex="1">
+                    <mxGeometry height="40" width="280" x="200" y="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="s4b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Compares answer with expected result" vertex="1">
+                    <mxGeometry height="40" width="280" x="200" y="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="d4a" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="Caller is an&#xa;approved verifier?" vertex="1">
+                    <mxGeometry height="80" width="140" x="270" y="220" as="geometry"/>
+                </mxCell>
+                <mxCell id="err4a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Throw error /&#xa;Fail transaction" vertex="1">
+                    <mxGeometry height="40" width="150" x="550" y="230" as="geometry"/>
+                </mxCell>
+                <mxCell id="d4b" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="Challenge passed?" vertex="1">
+                    <mxGeometry height="80" width="140" x="270" y="330" as="geometry"/>
+                </mxCell>
+                <mxCell id="s4c" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="passes + 1" vertex="1">
+                    <mxGeometry height="40" width="150" x="100" y="440" as="geometry"/>
+                </mxCell>
+                <mxCell id="s4d" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="fails + 1" vertex="1">
+                    <mxGeometry height="40" width="150" x="400" y="440" as="geometry"/>
+                </mxCell>
+                <mxCell id="s4e" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Endpoint-verified flag cleared" vertex="1">
+                    <mxGeometry height="40" width="220" x="400" y="510" as="geometry"/>
+                </mxCell>
+                <mxCell id="s4f" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="10% of the stake moved to the treasury" vertex="1">
+                    <mxGeometry height="40" width="220" x="400" y="580" as="geometry"/>
+                </mxCell>
+                <mxCell id="merge4" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="" vertex="1">
+                    <mxGeometry height="30" width="30" x="310" y="650" as="geometry"/>
+                </mxCell>
+                <mxCell id="s4g" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Challenge event emitted" vertex="1">
+                    <mxGeometry height="40" width="250" x="200" y="710" as="geometry"/>
+                </mxCell>
+                <mxCell id="end4" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="X" vertex="1">
+                    <mxGeometry height="20" width="20" x="315" y="780" as="geometry"/>
+                </mxCell>
+                <mxCell id="note4a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fontSize=10;fontFamily=IBM Plex Sans;arcSize=20;" value="A revoked name can still be slashed during its cooldown" vertex="1">
+                    <mxGeometry height="40" width="250" x="550" y="440" as="geometry"/>
+                </mxCell>
+                <mxCell id="note4b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fontSize=10;fontFamily=IBM Plex Sans;arcSize=20;" value="Slash = stake x slash share, rounded down" vertex="1">
+                    <mxGeometry height="40" width="250" x="550" y="510" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4a" edge="1" parent="1" source="verifier4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="s4a">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4b" edge="1" parent="1" source="s4a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s4b">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4c" edge="1" parent="1" source="s4b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="d4a">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4d" edge="1" parent="1" source="d4a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=10;" target="err4a" value="no">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4e" edge="1" parent="1" source="d4a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;" target="d4b" value="yes">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4f" edge="1" parent="1" source="d4b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;" target="s4c" value="yes">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4g" edge="1" parent="1" source="d4b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;" target="s4d" value="no">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4h" edge="1" parent="1" source="s4d" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s4e">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4i" edge="1" parent="1" source="s4e" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s4f">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4j" edge="1" parent="1" source="s4c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="merge4">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4k" edge="1" parent="1" source="s4f" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="merge4">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4l" edge="1" parent="1" source="merge4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s4g">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4m" edge="1" parent="1" source="s4g" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="end4">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="en4a" edge="1" parent="1" source="note4a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;endArrow=none;" target="s4d">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="en4b" edge="1" parent="1" source="note4b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;endArrow=none;" target="s4f">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="page5" name="Unstake and Withdraw">
+        <mxGraphModel dx="800" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title5" value="Unstake and Withdraw" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontStyle=1;fontFamily=IBM Plex Sans;" vertex="1" parent="1">
+                    <mxGeometry x="275" y="20" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="owner5" value="Owner" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=11;fontFamily=IBM Plex Sans;" vertex="1" parent="1">
+                    <mxGeometry x="100" y="70" width="30" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="s5a" value="Requests unstake&#xa;(revoke does this automatically)" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="80" width="280" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="s5b" value="Request time saved on the record" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="150" width="280" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="wait5" value="wait" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;fontStyle=2;fontFamily=IBM Plex Sans;" vertex="1" parent="1">
+                    <mxGeometry x="320" y="220" width="40" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="s5c" value="Owner requests withdraw" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="260" width="280" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="d5a" value="Cooldown elapsed?" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" vertex="1" parent="1">
+                    <mxGeometry x="270" y="330" width="140" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="err5a" value="Throw error /&#xa;Fail transaction" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="550" y="340" width="150" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="s5d" value="Remaining stake sent to the owner" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="440" width="280" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="s5e" value="Stake set to 0" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="510" width="280" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="s5f" value="Withdrawn event emitted" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="580" width="280" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="end5" value="X" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" vertex="1" parent="1">
+                    <mxGeometry x="330" y="650" width="20" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="note5a" value="The record keeps enough SOL for rent at all times" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fontSize=10;fontFamily=IBM Plex Sans;arcSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="550" y="440" width="250" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="owner5" target="s5a">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="s5a" target="s5b">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="s5b" target="s5c">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5d" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="s5c" target="d5a">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5e" value="no" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=10;" edge="1" parent="1" source="d5a" target="err5a">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5f" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;" edge="1" parent="1" source="d5a" target="s5d">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5g" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="s5d" target="s5e">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5h" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="s5e" target="s5f">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5i" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="s5f" target="end5">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="en5a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;endArrow=none;" edge="1" parent="1" source="note5a" target="s5d">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="page6" name="List a Name">
+        <mxGraphModel dx="990" dy="714" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title6" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontStyle=1;fontFamily=IBM Plex Sans;" value="List a Name" vertex="1">
+                    <mxGeometry height="30" width="200" x="325" y="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="owner6" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=11;fontFamily=IBM Plex Sans;" value="Owner" vertex="1">
+                    <mxGeometry height="60" width="30" x="100" y="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="s6a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Chooses a fixed price" vertex="1">
+                    <mxGeometry height="40" width="200" x="200" y="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="d6a" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="Owner of an&#xa;active name?" vertex="1">
+                    <mxGeometry height="80" width="100" x="250" y="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="err6a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Throw error /&#xa;Fail transaction" vertex="1">
+                    <mxGeometry height="40" width="150" x="500" y="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="d6b" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="Unstake pending?" vertex="1">
+                    <mxGeometry height="80" width="100" x="250" y="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="err6b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Throw error /&#xa;Fail transaction" vertex="1">
+                    <mxGeometry height="40" width="150" x="500" y="270" as="geometry"/>
+                </mxCell>
+                <mxCell id="d6c" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="Price above 0?" vertex="1">
+                    <mxGeometry height="80" width="100" x="250" y="370" as="geometry"/>
+                </mxCell>
+                <mxCell id="err6c" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Throw error /&#xa;Fail transaction" vertex="1">
+                    <mxGeometry height="40" width="150" x="500" y="380" as="geometry"/>
+                </mxCell>
+                <mxCell id="s6b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Listing created" vertex="1">
+                    <mxGeometry height="40" width="200" x="200" y="480" as="geometry"/>
+                </mxCell>
+                <mxCell id="s6c" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Listed event emitted" vertex="1">
+                    <mxGeometry height="40" width="200" x="200" y="550" as="geometry"/>
+                </mxCell>
+                <mxCell id="end6" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="X" vertex="1">
+                    <mxGeometry height="20" width="20" x="290" y="620" as="geometry"/>
+                </mxCell>
+                <mxCell id="cancel6title" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;fontFamily=IBM Plex Sans;" value="Cancel listing" vertex="1">
+                    <mxGeometry height="25" width="120" x="550" y="480" as="geometry"/>
+                </mxCell>
+                <mxCell id="seller6" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=11;fontFamily=IBM Plex Sans;" value="Seller" vertex="1">
+                    <mxGeometry height="60" width="30" x="500" y="520" as="geometry"/>
+                </mxCell>
+                <mxCell id="s6d" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Cancels" vertex="1">
+                    <mxGeometry height="40" width="150" x="570" y="530" as="geometry"/>
+                </mxCell>
+                <mxCell id="s6e" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Listing closed, rent returned" vertex="1">
+                    <mxGeometry height="40" width="200" x="570" y="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="end6b" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="X" vertex="1">
+                    <mxGeometry height="20" width="20" x="660" y="670" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6a" edge="1" parent="1" source="owner6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="s6a">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6b" edge="1" parent="1" source="s6a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="d6a">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6c" edge="1" parent="1" source="d6a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=10;" target="err6a" value="no">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6d" edge="1" parent="1" source="d6a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;" target="d6b" value="yes">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6e" edge="1" parent="1" source="d6b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=10;" target="err6b" value="yes">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6f" edge="1" parent="1" source="d6b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;" target="d6c" value="no">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6g" edge="1" parent="1" source="d6c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=10;" target="err6c" value="no">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6h" edge="1" parent="1" source="d6c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;" target="s6b" value="yes">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6i" edge="1" parent="1" source="s6b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s6c">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6j" edge="1" parent="1" source="s6c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="end6">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6k" edge="1" parent="1" source="seller6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="s6d">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6l" edge="1" parent="1" source="s6d" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s6e">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6m" edge="1" parent="1" source="s6e" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="end6b">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="page7" name="Buy a Name">
+        <mxGraphModel dx="1504" dy="1085" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title7" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontStyle=1;fontFamily=IBM Plex Sans;" value="Buy a Name" vertex="1">
+                    <mxGeometry height="30" width="200" x="325" y="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="buyer7" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=11;fontFamily=IBM Plex Sans;" value="Buyer" vertex="1">
+                    <mxGeometry height="60" width="30" x="100" y="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="s7a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Sets a maximum price and buys" vertex="1">
+                    <mxGeometry height="40" width="250" x="200" y="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="d7a" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="Name active?" vertex="1">
+                    <mxGeometry height="70" width="110" x="270" y="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="err7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Throw error /&#xa;Fail transaction" vertex="1">
+                    <mxGeometry height="40" width="150" x="550" y="155" as="geometry"/>
+                </mxCell>
+                <mxCell id="d7b" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="Listing still valid?&#xa;(owner unchanged)" vertex="1">
+                    <mxGeometry height="80" width="130" x="260" y="250" as="geometry"/>
+                </mxCell>
+                <mxCell id="d7c" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="Buyer is not&#xa;the seller?" vertex="1">
+                    <mxGeometry height="80" width="130" x="260" y="360" as="geometry"/>
+                </mxCell>
+                <mxCell id="d7d" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="No unstake&#xa;pending?" vertex="1">
+                    <mxGeometry height="80" width="130" x="260" y="470" as="geometry"/>
+                </mxCell>
+                <mxCell id="d7e" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="Price at or below&#xa;the maximum?" vertex="1">
+                    <mxGeometry height="80" width="130" x="260" y="580" as="geometry"/>
+                </mxCell>
+                <mxCell id="s7b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Fee sent to treasury" vertex="1">
+                    <mxGeometry height="40" width="250" x="200" y="690" as="geometry"/>
+                </mxCell>
+                <mxCell id="s7c" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Rest of the price sent to the seller" vertex="1">
+                    <mxGeometry height="40" width="250" x="200" y="760" as="geometry"/>
+                </mxCell>
+                <mxCell id="s7d" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Owner changed to the buyer;&#xa;endpoint-verified flag cleared" vertex="1">
+                    <mxGeometry height="40" width="280" x="200" y="830" as="geometry"/>
+                </mxCell>
+                <mxCell id="s7e" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Listing closed" vertex="1">
+                    <mxGeometry height="40" width="250" x="200" y="900" as="geometry"/>
+                </mxCell>
+                <mxCell id="s7f" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Sold event emitted" vertex="1">
+                    <mxGeometry height="40" width="250" x="200" y="970" as="geometry"/>
+                </mxCell>
+                <mxCell id="end7" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="X" vertex="1">
+                    <mxGeometry height="20" width="20" x="315" y="1040" as="geometry"/>
+                </mxCell>
+                <mxCell id="note7a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fontSize=10;fontFamily=IBM Plex Sans;arcSize=20;" value="Stake and reputation stay in the record, so they move to the buyer" vertex="1">
+                    <mxGeometry height="40" width="250" x="550" y="830" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7a" edge="1" parent="1" source="buyer7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="s7a">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7b" edge="1" parent="1" source="s7a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="d7a">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7c" edge="1" parent="1" source="d7a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=10;" target="err7" value="no">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7d" edge="1" parent="1" source="d7a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;" target="d7b" value="yes">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7e" edge="1" parent="1" source="d7b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;fontSize=10;" target="err7" value="no">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7f" edge="1" parent="1" source="d7b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;" target="d7c" value="yes">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7g" edge="1" parent="1" source="d7c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;fontSize=10;" target="err7" value="no">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7h" edge="1" parent="1" source="d7c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;" target="d7d" value="yes">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7i" edge="1" parent="1" source="d7d" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;fontSize=10;" target="err7" value="no">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7j" edge="1" parent="1" source="d7d" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;" target="d7e" value="yes">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7k" edge="1" parent="1" source="d7e" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;fontSize=10;" target="err7" value="no">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7l" edge="1" parent="1" source="d7e" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;" target="s7b" value="yes">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7m" edge="1" parent="1" source="s7b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s7c">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7n" edge="1" parent="1" source="s7c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s7d">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7o" edge="1" parent="1" source="s7d" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s7e">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7p" edge="1" parent="1" source="s7e" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s7f">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7q" edge="1" parent="1" source="s7f" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="end7">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="en7a" edge="1" parent="1" source="note7a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;endArrow=none;" target="s7d">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="page8" name="Resolve a Name">
+        <mxGraphModel dx="1372" dy="989" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title8" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontStyle=1;fontFamily=IBM Plex Sans;" value="Resolve a Name" vertex="1">
+                    <mxGeometry height="30" width="250" x="300" y="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="agent8" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=11;fontFamily=IBM Plex Sans;" value="Agent or app" vertex="1">
+                    <mxGeometry height="60" width="30" x="80" y="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="resolver8" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=11;fontFamily=IBM Plex Sans;" value="Resolver" vertex="1">
+                    <mxGeometry height="60" width="30" x="650" y="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="s8a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Asks to resolve a name" vertex="1">
+                    <mxGeometry height="40" width="200" x="200" y="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="d8a" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="Answer in cache?" vertex="1">
+                    <mxGeometry height="70" width="100" x="250" y="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="s8b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Return cached answer" vertex="1">
+                    <mxGeometry height="40" width="200" x="200" y="250" as="geometry"/>
+                </mxCell>
+                <mxCell id="s8c" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Read the agent record from the chain" vertex="1">
+                    <mxGeometry height="40" width="250" x="200" y="320" as="geometry"/>
+                </mxCell>
+                <mxCell id="d8b" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="Record found?" vertex="1">
+                    <mxGeometry height="70" width="100" x="250" y="390" as="geometry"/>
+                </mxCell>
+                <mxCell id="s8d" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Return 404" vertex="1">
+                    <mxGeometry height="40" width="200" x="200" y="490" as="geometry"/>
+                </mxCell>
+                <mxCell id="d8c" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="Revoked?" vertex="1">
+                    <mxGeometry height="70" width="100" x="250" y="560" as="geometry"/>
+                </mxCell>
+                <mxCell id="s8e" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Return 410" vertex="1">
+                    <mxGeometry height="40" width="200" x="200" y="660" as="geometry"/>
+                </mxCell>
+                <mxCell id="s8f" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Sign the answer with the resolver key" vertex="1">
+                    <mxGeometry height="40" width="280" x="200" y="730" as="geometry"/>
+                </mxCell>
+                <mxCell id="s8g" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Return endpoint, owner, stake, reputation, TTL and signature" vertex="1">
+                    <mxGeometry height="40" width="350" x="200" y="800" as="geometry"/>
+                </mxCell>
+                <mxCell id="s8h" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Caller verifies the signature with the key stored on-chain" vertex="1">
+                    <mxGeometry height="40" width="350" x="200" y="870" as="geometry"/>
+                </mxCell>
+                <mxCell id="end8" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="X" vertex="1">
+                    <mxGeometry height="20" width="20" x="360" y="940" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8a" edge="1" parent="1" source="agent8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="s8a">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8b" edge="1" parent="1" source="s8a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="d8a">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8c" edge="1" parent="1" source="d8a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;" target="s8b" value="yes">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8d" edge="1" parent="1" source="d8a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontSize=10;" target="s8c" value="no">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8e" edge="1" parent="1" source="s8c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="d8b">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8f" edge="1" parent="1" source="d8b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;" target="s8d" value="no">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8g" edge="1" parent="1" source="d8b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontSize=10;" target="d8c" value="yes">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8h" edge="1" parent="1" source="d8c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;" target="s8e" value="yes">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8i" edge="1" parent="1" source="d8c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontSize=10;" target="s8f" value="no">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8j" edge="1" parent="1" source="s8f" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s8g">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8k" edge="1" parent="1" source="s8g" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s8h">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8l" edge="1" parent="1" source="s8h" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="end8">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8m" edge="1" parent="1" source="resolver8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="s8f">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="page9" name="Index Events">
+        <mxGraphModel dx="841" dy="606" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title9" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontStyle=1;fontFamily=IBM Plex Sans;" value="Index Events (Explorer data)" vertex="1">
+                    <mxGeometry height="30" width="350" x="250" y="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="indexer9" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=11;fontFamily=IBM Plex Sans;" value="Indexer (subscribes to program events)" vertex="1">
+                    <mxGeometry height="60" width="30" x="80" y="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="d9a" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="New event?" vertex="1">
+                    <mxGeometry height="70" width="100" x="250" y="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="s9a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Store event in history table" vertex="1">
+                    <mxGeometry height="40" width="200" x="200" y="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="s9b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Update the copy of the agent record" vertex="1">
+                    <mxGeometry height="40" width="250" x="200" y="250" as="geometry"/>
+                </mxCell>
+                <mxCell id="s9c" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Recompute trust badge" vertex="1">
+                    <mxGeometry height="40" width="200" x="200" y="320" as="geometry"/>
+                </mxCell>
+                <mxCell id="s9d" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Clear the resolver cache entry" vertex="1">
+                    <mxGeometry height="40" width="220" x="200" y="390" as="geometry"/>
+                </mxCell>
+                <mxCell id="end9" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="X" vertex="1">
+                    <mxGeometry height="20" width="20" x="290" y="460" as="geometry"/>
+                </mxCell>
+                <mxCell id="note9a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fontSize=10;fontFamily=IBM Plex Sans;arcSize=20;" value="Explorer pages read this data: history, badges, search, wallet view, stats" vertex="1">
+                    <mxGeometry height="40" width="300" x="500" y="250" as="geometry"/>
+                </mxCell>
+                <mxCell id="e9a" edge="1" parent="1" source="indexer9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="d9a">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e9b" edge="1" parent="1" source="d9a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=10;" target="d9a" value="no">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="200" y="60"/>
+                            <mxPoint x="200" y="115"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e9c" edge="1" parent="1" source="d9a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;" target="s9a" value="yes">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e9d" edge="1" parent="1" source="s9a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s9b">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e9e" edge="1" parent="1" source="s9b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s9c">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e9f" edge="1" parent="1" source="s9c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s9d">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e9g" edge="1" parent="1" source="s9d" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="end9">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="en9a" edge="1" parent="1" source="note9a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;endArrow=none;" target="s9b">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="page10" name="End to end overview">
+        <mxGraphModel dx="1533" dy="1106" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="1400" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title10" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontStyle=1;fontFamily=IBM Plex Sans;" value="End to end overview" vertex="1">
+                    <mxGeometry height="30" width="300" x="400" y="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="steps10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fontSize=11;fontFamily=IBM Plex Sans;" value="&lt;b&gt;End to end&lt;/b&gt;&lt;br&gt;1 - Owner registers a name and the stake is locked in the agent record&lt;br&gt;2 - The program emits events; the Indexer stores history and badges&lt;br&gt;3 - An agent or app asks the Resolver for a name and gets a signed answer&lt;br&gt;4 - A Verifier tests the agent endpoint and reports on-chain&lt;br&gt;5 - The Explorer shows the agent page: owner, stake, history, badge, health&lt;br&gt;6 - A Buyer can buy listed names; fees go to the treasury" vertex="1">
+                    <mxGeometry height="120" width="1000" x="50" y="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="owner10" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=11;fontFamily=IBM Plex Sans;" value="Owner" vertex="1">
+                    <mxGeometry height="60" width="30" x="100" y="250" as="geometry"/>
+                </mxCell>
+                <mxCell id="agent10" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=11;fontFamily=IBM Plex Sans;" value="Agent or app" vertex="1">
+                    <mxGeometry height="60" width="30" x="100" y="500" as="geometry"/>
+                </mxCell>
+                <mxCell id="verifier10" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=11;fontFamily=IBM Plex Sans;" value="Verifier" vertex="1">
+                    <mxGeometry height="60" width="30" x="100" y="750" as="geometry"/>
+                </mxCell>
+                <mxCell id="buyer10" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=11;fontFamily=IBM Plex Sans;" value="Buyer" vertex="1">
+                    <mxGeometry height="60" width="30" x="100" y="1000" as="geometry"/>
+                </mxCell>
+                <mxCell id="prog10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;" value="AgentNS Program&#xa;(Solana)" vertex="1">
+                    <mxGeometry height="60" width="180" x="350" y="350" as="geometry"/>
+                </mxCell>
+                <mxCell id="indexer10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;" value="Indexer + DB" vertex="1">
+                    <mxGeometry height="60" width="180" x="350" y="550" as="geometry"/>
+                </mxCell>
+                <mxCell id="resolver10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;" value="Resolver API +&#xa;MCP server" vertex="1">
+                    <mxGeometry height="60" width="180" x="350" y="750" as="geometry"/>
+                </mxCell>
+                <mxCell id="explorer10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;" value="Explorer UI" vertex="1">
+                    <mxGeometry height="60" width="180" x="350" y="950" as="geometry"/>
+                </mxCell>
+                <mxCell id="endpoint10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;" value="Agent endpoint&#xa;(external)" vertex="1">
+                    <mxGeometry height="60" width="180" x="700" y="750" as="geometry"/>
+                </mxCell>
+                <mxCell id="treasury10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;" value="Treasury" vertex="1">
+                    <mxGeometry height="60" width="180" x="700" y="350" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea1" edge="1" parent="1" source="owner10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#00AA00;strokeWidth=2;fontSize=10;fontFamily=IBM Plex Sans;" target="prog10" value="Registers name + stake">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea2" edge="1" parent="1" source="prog10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#0000CC;strokeWidth=2;fontSize=10;fontFamily=IBM Plex Sans;" target="indexer10" value="Events">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea3" edge="1" parent="1" source="agent10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#00AA00;strokeWidth=2;fontSize=10;fontFamily=IBM Plex Sans;" target="resolver10" value="Resolve name">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea4" edge="1" parent="1" source="resolver10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#FF4500;strokeWidth=2;fontSize=10;fontFamily=IBM Plex Sans;" target="agent10" value="Signed answer">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea5" edge="1" parent="1" source="verifier10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#0000CC;strokeWidth=2;fontSize=10;fontFamily=IBM Plex Sans;" target="endpoint10" value="Test request">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea6" edge="1" parent="1" source="verifier10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#0000CC;strokeWidth=2;fontSize=10;fontFamily=IBM Plex Sans;" target="prog10" value="Reports result">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea7" edge="1" parent="1" source="explorer10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#00AA00;strokeWidth=2;fontSize=10;fontFamily=IBM Plex Sans;" target="indexer10" value="Reads history">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea8" edge="1" parent="1" source="buyer10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#8B0000;strokeWidth=2;fontSize=10;fontFamily=IBM Plex Sans;" target="prog10" value="Buys name">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ea9" edge="1" parent="1" source="prog10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#8B0000;strokeWidth=2;fontSize=10;fontFamily=IBM Plex Sans;" target="treasury10" value="Fees and slashed stake">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
