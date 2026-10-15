@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="page1" name="Protocol Requirements + Overview">
-        <mxGraphModel dx="782" dy="564" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1351" dy="868" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -52,7 +52,7 @@
         </mxGraphModel>
     </diagram>
     <diagram id="page2" name="Register Name">
-        <mxGraphModel dx="1372" dy="989" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="833" dy="989" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -153,7 +153,7 @@
         </mxGraphModel>
     </diagram>
     <diagram id="page3" name="Update and Verify Endpoint">
-        <mxGraphModel dx="1241" dy="895" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="766" dy="910" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -263,7 +263,7 @@
         </mxGraphModel>
     </diagram>
     <diagram id="page4" name="Challenge and Slash">
-        <mxGraphModel dx="1150" dy="829" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="742" dy="881" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -364,84 +364,84 @@
         </mxGraphModel>
     </diagram>
     <diagram id="page5" name="Unstake and Withdraw">
-        <mxGraphModel dx="800" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="742" dy="881" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="title5" value="Unstake and Withdraw" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontStyle=1;fontFamily=IBM Plex Sans;" vertex="1" parent="1">
-                    <mxGeometry x="275" y="20" width="300" height="30" as="geometry"/>
+                <mxCell id="title5" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontStyle=1;fontFamily=IBM Plex Sans;" value="Unstake and Withdraw" vertex="1">
+                    <mxGeometry height="30" width="300" x="275" y="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="owner5" value="Owner" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=11;fontFamily=IBM Plex Sans;" vertex="1" parent="1">
-                    <mxGeometry x="100" y="70" width="30" height="60" as="geometry"/>
+                <mxCell id="owner5" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=11;fontFamily=IBM Plex Sans;" value="Owner" vertex="1">
+                    <mxGeometry height="60" width="30" x="100" y="70" as="geometry"/>
                 </mxCell>
-                <mxCell id="s5a" value="Requests unstake&#xa;(revoke does this automatically)" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" vertex="1" parent="1">
-                    <mxGeometry x="200" y="80" width="280" height="40" as="geometry"/>
+                <mxCell id="s5a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Requests unstake&#xa;(revoke does this automatically)" vertex="1">
+                    <mxGeometry height="40" width="280" x="200" y="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="s5b" value="Request time saved on the record" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" vertex="1" parent="1">
-                    <mxGeometry x="200" y="150" width="280" height="40" as="geometry"/>
+                <mxCell id="s5b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Request time saved on the record" vertex="1">
+                    <mxGeometry height="40" width="280" x="200" y="150" as="geometry"/>
                 </mxCell>
-                <mxCell id="wait5" value="wait" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;fontStyle=2;fontFamily=IBM Plex Sans;" vertex="1" parent="1">
-                    <mxGeometry x="320" y="220" width="40" height="25" as="geometry"/>
+                <mxCell id="wait5" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;fontStyle=2;fontFamily=IBM Plex Sans;" value="wait" vertex="1">
+                    <mxGeometry height="25" width="40" x="320" y="220" as="geometry"/>
                 </mxCell>
-                <mxCell id="s5c" value="Owner requests withdraw" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" vertex="1" parent="1">
-                    <mxGeometry x="200" y="260" width="280" height="40" as="geometry"/>
+                <mxCell id="s5c" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Owner requests withdraw" vertex="1">
+                    <mxGeometry height="40" width="280" x="200" y="260" as="geometry"/>
                 </mxCell>
-                <mxCell id="d5a" value="Cooldown elapsed?" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" vertex="1" parent="1">
-                    <mxGeometry x="270" y="330" width="140" height="80" as="geometry"/>
+                <mxCell id="d5a" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="Cooldown elapsed?" vertex="1">
+                    <mxGeometry height="80" width="140" x="270" y="330" as="geometry"/>
                 </mxCell>
-                <mxCell id="err5a" value="Throw error /&#xa;Fail transaction" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" vertex="1" parent="1">
-                    <mxGeometry x="550" y="340" width="150" height="40" as="geometry"/>
+                <mxCell id="err5a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Throw error /&#xa;Fail transaction" vertex="1">
+                    <mxGeometry height="40" width="150" x="550" y="340" as="geometry"/>
                 </mxCell>
-                <mxCell id="s5d" value="Remaining stake sent to the owner" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" vertex="1" parent="1">
-                    <mxGeometry x="200" y="440" width="280" height="40" as="geometry"/>
+                <mxCell id="s5d" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Remaining stake sent to the owner" vertex="1">
+                    <mxGeometry height="40" width="280" x="200" y="440" as="geometry"/>
                 </mxCell>
-                <mxCell id="s5e" value="Stake set to 0" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" vertex="1" parent="1">
-                    <mxGeometry x="200" y="510" width="280" height="40" as="geometry"/>
+                <mxCell id="s5e" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Stake set to 0" vertex="1">
+                    <mxGeometry height="40" width="280" x="200" y="510" as="geometry"/>
                 </mxCell>
-                <mxCell id="s5f" value="Withdrawn event emitted" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" vertex="1" parent="1">
-                    <mxGeometry x="200" y="580" width="280" height="40" as="geometry"/>
+                <mxCell id="s5f" parent="1" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=11;fontFamily=IBM Plex Sans;arcSize=20;" value="Withdrawn event emitted" vertex="1">
+                    <mxGeometry height="40" width="280" x="200" y="580" as="geometry"/>
                 </mxCell>
-                <mxCell id="end5" value="X" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" vertex="1" parent="1">
-                    <mxGeometry x="330" y="650" width="20" height="20" as="geometry"/>
+                <mxCell id="end5" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;fontFamily=IBM Plex Sans;" value="X" vertex="1">
+                    <mxGeometry height="20" width="20" x="330" y="650" as="geometry"/>
                 </mxCell>
-                <mxCell id="note5a" value="The record keeps enough SOL for rent at all times" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fontSize=10;fontFamily=IBM Plex Sans;arcSize=20;" vertex="1" parent="1">
-                    <mxGeometry x="550" y="440" width="250" height="40" as="geometry"/>
+                <mxCell id="note5a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fontSize=10;fontFamily=IBM Plex Sans;arcSize=20;" value="The record keeps enough SOL for rent at all times" vertex="1">
+                    <mxGeometry height="40" width="250" x="550" y="440" as="geometry"/>
                 </mxCell>
-                <mxCell id="e5a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="owner5" target="s5a">
+                <mxCell id="e5a" edge="1" parent="1" source="owner5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="s5a">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="e5b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="s5a" target="s5b">
+                <mxCell id="e5b" edge="1" parent="1" source="s5a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s5b">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="e5c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="s5b" target="s5c">
+                <mxCell id="e5c" edge="1" parent="1" source="s5b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s5c">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="e5d" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="s5c" target="d5a">
+                <mxCell id="e5d" edge="1" parent="1" source="s5c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="d5a">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="e5e" value="no" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=10;" edge="1" parent="1" source="d5a" target="err5a">
+                <mxCell id="e5e" edge="1" parent="1" source="d5a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=10;" target="err5a" value="no">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="e5f" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;" edge="1" parent="1" source="d5a" target="s5d">
+                <mxCell id="e5f" edge="1" parent="1" source="d5a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10;" target="s5d" value="yes">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="e5g" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="s5d" target="s5e">
+                <mxCell id="e5g" edge="1" parent="1" source="s5d" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s5e">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="e5h" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="s5e" target="s5f">
+                <mxCell id="e5h" edge="1" parent="1" source="s5e" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="s5f">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="e5i" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="s5f" target="end5">
+                <mxCell id="e5i" edge="1" parent="1" source="s5f" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="end5">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="en5a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;endArrow=none;" edge="1" parent="1" source="note5a" target="s5d">
+                <mxCell id="en5a" edge="1" parent="1" source="note5a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;endArrow=none;" target="s5d">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
     </diagram>
     <diagram id="page6" name="List a Name">
-        <mxGraphModel dx="990" dy="714" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="720" dy="855" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -539,7 +539,7 @@
         </mxGraphModel>
     </diagram>
     <diagram id="page7" name="Buy a Name">
-        <mxGraphModel dx="1504" dy="1085" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="913" dy="1085" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -649,7 +649,7 @@
         </mxGraphModel>
     </diagram>
     <diagram id="page8" name="Resolve a Name">
-        <mxGraphModel dx="1372" dy="989" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="833" dy="989" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
